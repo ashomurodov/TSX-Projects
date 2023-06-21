@@ -1,5 +1,4 @@
 import { AppState } from "../app";
-import cx from "classnames";
 
 interface HistoriesProps extends Pick<AppState, "winner" | "histories" | "nextPlayer" | "currentIdx"> {}
 
