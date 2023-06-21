@@ -42,13 +42,26 @@ export default class App extends React.Component<{}, AppState> {
     });
   };
 
+  handleHistory = (idx: number) => {
+    const { histories } = this.state;
+    const board = [...histories[idx]];
+
+    this.setState({ board, currentIdx: idx });
+  };
+
   // Rendering...
   render(): React.ReactNode {
     const { board, nextPlayer, histories, currentIdx, winner } = this.state;
     return (
       <main className="container d-flex mt-5" style={{ gap: "20px" }}>
         <Board board={board} onCell={this.handleCell} />
-        <Histories winner={winner} currentIdx={currentIdx} nextPlayer={nextPlayer} histories={histories} />
+        <Histories
+          onHistory={this.handleHistory}
+          winner={winner}
+          currentIdx={currentIdx}
+          nextPlayer={nextPlayer}
+          histories={histories}
+        />
       </main>
     );
   }
