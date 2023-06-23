@@ -18,12 +18,20 @@ const players: Record<Player, Player> = {
 
 export default class App extends React.Component<{}, AppState> {
   // Main state
-  state: AppState = {
-    board: new Array(9).fill(null),
-    histories: [new Array(9).fill(null)],
-    nextPlayer: "X",
-    currentIdx: 0,
-    // winner: "X",
+  constructor(props = {}) {
+    super(props);
+    this.state = JSON.parse(localStorage.getItem("state")!) || {
+      board: new Array(9).fill(null),
+      histories: [new Array(9).fill(null)],
+      nextPlayer: "X",
+      currentIdx: 0,
+      // winner: "X",
+    };
+  }
+
+  setStateStorage: typeof this.setState = (state) => {
+    localStorage.setItem("state", JSON.stringify(state));
+    this.setState(state);
   };
 
   handleCell = (idx: number) => {
@@ -34,11 +42,11 @@ export default class App extends React.Component<{}, AppState> {
 
     board[idx] = nextPlayer;
 
-    this.setState({
+    this.setStateStorage({
       board,
       currentIdx: currentIdx + 1,
       nextPlayer: players[nextPlayer],
-      histories: [...histories, board],
+      histories: [...histories.splice(0, currentIdx + 1), board],
     });
   };
 
@@ -46,7 +54,7 @@ export default class App extends React.Component<{}, AppState> {
     const { histories } = this.state;
     const board = [...histories[idx]];
 
-    this.setState({ board, currentIdx: idx });
+    this.setStateStorage({ board, currentIdx: idx });
   };
 
   // Rendering...
